@@ -1,9 +1,7 @@
 ### [Русский язык](README_RU.md)
-### Source code of the Telegram bot [bl4ckm45k_vpn_bot](https://t.me/bl4ckm45k_vpn_bot "bl4ckm45k_vpn_bot")
 
 ### If you need a bot for providing paid access:
-#### [Description of the paid bot functionality](https://github.com/bl4ckm45k/vpnbot/blob/master/README_PAID_BOT.md "Description of the paid bot functionality")
-#### [Contact on TG: pay4fallwall](https://pay4fallwall.t.me/ "pay4fallwall")
+#### [Contact on TG: pay4fallwall](https://yarodya.t.me/ "@yarodya")
 
 ### Setup
 - Clone this repository
