@@ -1,7 +1,7 @@
 ### [Русский язык](README_RU.md)
 
 ### If you need a bot for providing paid access:
-#### [Contact on TG: pay4fallwall](https://yarodya.t.me/ "@yarodya")
+#### [Contact on TG: @yarodya](https://t.me/yarodya "@yarodya")
 
 ### Setup
 - Clone this repository
