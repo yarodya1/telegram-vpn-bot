@@ -15,7 +15,7 @@ def keyboard_start():
 
 def keyboard_help():
     builder = InlineKeyboardBuilder()
-    builder.button(text='Клиенты для подключения', url='https://docs.marzban.dev/start/reality_app/')
+    builder.button(text='Клиенты для подключения', url='https://marzban-docs.sm1ky.com/start/reality_app/')
     return builder.as_markup()
 
 

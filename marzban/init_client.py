@@ -26,7 +26,7 @@ class MarzClientCache:
             self._client = AuthenticatedClient(
                 base_url=self._base_url,
                 token=self._token,
-                verify_ssl=True
+                verify_ssl=False
             )
             self._logger.info(f'Set new client object')
         self._logger.info(f'We have client object')
@@ -38,7 +38,7 @@ class MarzClientCache:
                 username=self._config.marzban.username,
                 password=self._config.marzban.password,
             )
-            async with Client(base_url=self._base_url) as client:
+            async with Client(base_url=self._base_url, verify_ssl=False) as client:
                 token = await admin_token.asyncio(
                     client=client,
                     body=login_data,

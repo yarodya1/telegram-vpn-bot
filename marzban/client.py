@@ -6,7 +6,7 @@ from typing import List, Optional
 from urllib.parse import urlparse, parse_qs
 
 from marzban_api_client.api.user import add_user, get_user, delete_expired_users
-from marzban_api_client.models import UserCreate, UserCreateProxies, UserResponse
+from marzban_api_client.models import UserCreate, UserCreateProxies, UserResponse, UserCreateInbounds
 from marzban_api_client.types import Response
 
 from loader import marzban_client
@@ -14,16 +14,19 @@ from loader import marzban_client
 logger = logging.getLogger(__name__)
 proxies = {
     "vmess": {},
-    "vless": {
-        "flow": ""
-    },
-    "trojan": {},
-    "shadowsocks": {
-        "method": "chacha20-ietf-poly1305"
-    }
+#    "vless": {
+#        "flow": ""
+#    },
+#    "trojan": {},
+#    "shadowsocks": {
+#        "method": "chacha20-ietf-poly1305"
+#    }
 }
 proxies = UserCreateProxies.from_dict(proxies)
 
+inbounds = UserCreateInbounds.from_dict({
+    "VMess TCP": True
+})
 
 def expire_timestamp(expire: datetime):
     new_utc_timestamp = int(expire.timestamp())
@@ -35,6 +38,7 @@ async def create_user(sub_id: str, expire: datetime) -> bool:
     user_data = UserCreate(
         username=sub_id,
         expire=exp_timestamp,
+        inbounds=inbounds,
         proxies=proxies)
     response: Response = add_user.sync_detailed(client=await marzban_client.get_client(), body=user_data)
     logger.info(f'Create user result: {response.status_code}')
@@ -52,6 +56,7 @@ async def get_marz_user(sub_id: str) -> UserResponse:
 async def get_user_links(sub_id: str) -> str:
     response: UserResponse = await get_marz_user(sub_id)
     keys = []
+    logger.info("%s", response.links)
     for x in response.links:
         key_data = x.split('://')
         if key_data[0] == 'vmess':
