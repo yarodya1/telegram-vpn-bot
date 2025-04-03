@@ -6,26 +6,26 @@ from typing import List, Optional
 from urllib.parse import urlparse, parse_qs
 
 from marzban_api_client.api.user import add_user, get_user, delete_expired_users
-from marzban_api_client.models import UserCreate, UserCreateProxies, UserResponse, UserCreateInbounds
+from marzban_api_client.models import UserCreate, UserCreateProxies, UserResponse, UserCreateInbounds, UserDataLimitResetStrategy
 from marzban_api_client.types import Response
 
 from loader import marzban_client
 
 logger = logging.getLogger(__name__)
 proxies = {
-    "vmess": {},
+#    "vmess": {},
 #    "vless": {
 #        "flow": ""
 #    },
 #    "trojan": {},
-#    "shadowsocks": {
-#        "method": "chacha20-ietf-poly1305"
-#    }
+    "shadowsocks": {
+        "method": "chacha20-ietf-poly1305"
+    }
 }
 proxies = UserCreateProxies.from_dict(proxies)
 
 inbounds = UserCreateInbounds.from_dict({
-    "VMess TCP": True
+    "Shadowsocks TCP": True
 })
 
 def expire_timestamp(expire: datetime):
@@ -37,13 +37,24 @@ async def create_user(sub_id: str, expire: datetime) -> bool:
     exp_timestamp = expire_timestamp(expire)
     user_data = UserCreate(
         username=sub_id,
+        data_limit=0,
+        data_limit_reset_strategy=UserDataLimitResetStrategy.NO_RESET,
         expire=exp_timestamp,
         inbounds=inbounds,
-        proxies=proxies)
-    response: Response = add_user.sync_detailed(client=await marzban_client.get_client(), body=user_data)
-    logger.info(f'Create user result: {response.status_code}')
-    if not response:
+        proxies=proxies
+    )
+
+    logger.info("📤 Создание пользователя с данными:")
+    logger.info(json.dumps(user_data.to_dict(), indent=2, ensure_ascii=False))
+
+    client = await marzban_client.get_client()
+    response: Response = add_user.sync_detailed(client=client, body=user_data)
+
+    logger.info(f"📥 Ответ от Marzban: {response.status_code}")
+    if response.status_code != 200:
+        logger.warning(f"⚠️ Не удалось создать пользователя: {response.content}")
         return False
+
     return True
 
 

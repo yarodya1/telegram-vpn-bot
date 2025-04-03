@@ -4,3 +4,4 @@ __pycache__/
 .idea
 /venv
 /.env
+etc/nginx/conf/default.conf
