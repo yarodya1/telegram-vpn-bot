@@ -41,7 +41,7 @@ cd telegram-vpn-bot
 
 ```bash
 cat env.dist > .env  
-cat env.marzban.dist > env.marzban
+cat env.marzban.dist > .env.marzban
 ```
 
 **Основные параметры файла:**
